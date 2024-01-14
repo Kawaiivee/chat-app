@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { Message } from "../classes/types";
 
 // for emitting socket events -- listening happens in components
-const socket = io(`localhost:7898`);
+const socket = io();
 
 const connectToServer = () => {
   socket.connect();

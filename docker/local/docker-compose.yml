@@ -1,0 +1,22 @@
+version: '3'
+services:
+  chat-app-web:
+    container_name: chat-app-web
+    tty: true
+    build:
+      context: '../../chat-app-web'
+      dockerfile: Dockerfile
+    ports:
+      - 7896:7896
+    environment:
+      - PORT=7896
+  chat-app-server:
+    container_name: chat-app-server
+    tty: true
+    build:
+        context: '../../chat-app-server'
+        dockerfile: Dockerfile
+    ports:
+      - 7898:7898
+    environment:
+      - PORT=7898
