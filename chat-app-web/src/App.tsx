@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import ChatWriter from "./components/ChatWriter";
 import ChatMessages from "./components/ChatMessages";
 import { Col, Divider, Row } from "antd";
 import {socket, SocketContext} from "./context/socket";
-import DoodleCanvas from "./components/DoodleCanvas";
+// import DoodleCanvas from "./components/DoodleCanvas";
 
 const App = () => {
+  const [nameSelected, setNameSelected] = useState<boolean>(false);
+  
   return (
     <SocketContext.Provider value={socket}>
       <Row>
@@ -14,7 +17,7 @@ const App = () => {
         <Col span={12}>
           <ChatWriter />
           <Divider />
-          <ChatMessages />
+          <ChatMessages nameSelected={nameSelected} />
         </Col>
       </Row>
     </SocketContext.Provider>

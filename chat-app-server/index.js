@@ -32,11 +32,14 @@ let messages = [];
 let users = [];   // NEED SOME KIND OF GUID FOR USERS TO STORE COLOR AND OTHER INDIVIDUAL INFO
 
 io.on('connection', (socket) => {
+  io.sockets.emit('server_received_message', messages);
+
   console.log(`Socket ID: ${socket.id} connected`);
   users.push({
     id: socket.id,
     color: tagColors[Math.floor(Math.random() * tagColors.length)]
   });
+  console.log(users.map(u => u.Id).toString());
   
   socket.on('disconnect', () => {
     //console.log(`Socket Id: ${socket.id} disconnected`);

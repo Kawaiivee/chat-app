@@ -17,12 +17,18 @@ const ChatWriter = () => {
     if(name == null || name == undefined || name?.length <= 0){
       setNameSelected(false);
     }
+    else {
+      setNameSelected(true);
+    }
   }, []);
 
   const handleSetNameClicked = () => {
-    localStorage.setItem('name', name);
-    setName(name);
+    localStorage.setItem('name', name.trim());
+    setName(name.trim());
     setNameSelected(true);
+    socket.emit('name_selected', {
+
+    });
   };
 
   const handleSendMessageClicked = () => {
