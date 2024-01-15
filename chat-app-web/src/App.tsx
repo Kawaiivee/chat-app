@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import ChatWriter from "./components/ChatWriter";
 import ChatMessages from "./components/ChatMessages";
-import { Row, Col, Divider } from "antd";
+import { Row, Divider } from "antd";
 import {socket, SocketContext} from "./context/socket";
 
 const App = () => {
