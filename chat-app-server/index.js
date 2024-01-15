@@ -13,18 +13,30 @@ const io = new Server(server, {cors:
     allowedHeaders: ["Access-Control-Allow-Origin"]
   }
 });
-const messages = [];
+
+let messages = [];
+let users = [];
 
 io.on('connection', (socket) => {
-  socket.on('disconnect', () => {
-    socket.broadcast.emit({
 
-    });
+  socket.on('disconnect', () => {
+    console.log(`Socket Id: ${socket.id} disconnected`);
+    users = users.filter(a => a.id !== socket.id);
   });
-  socket.on('message', (data) => {
-    console.log(data);
+  
+  socket.on('send_global_message', (message) => {
+    console.log(`Global: ${decodeURIComponent(message?.messageContent?.text)} from ${message?.author?.name}`);
+    message.messageContent.text = decodeURIComponent(message?.messageContent?.text);
+    messages.push(message?.messageContent);
+    io.sockets.emit('server_received_message', messages);
   });
-  socket.broadcast()
+
+  socket.on('send_whisper_message', (message) => {
+    console.log(`Whisper: ${decodeURIComponent(message?.messageContent?.text)} from ${message?.author?.name}`);
+    message.messageContent.text = decodeURIComponent(message?.messageContent?.text);
+    messages.push(message?.messageContent);
+    io.sockets.emit('server_received_message', messages);
+  });
 });
 
 server.listen(process.env.PORT, () => {

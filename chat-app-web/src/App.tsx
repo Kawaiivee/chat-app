@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import ChatWriter from "./components/ChatWriter";
+import ChatMessages from "./components/ChatMessages";
+import { Row, Col, Divider } from "antd";
+import {socket, SocketContext} from "./context/socket";
 
 const App = () => {
-  const [name, setName] = useState<string>('');
-
-  useEffect(() => {
-    if(name?.length <= 0){
-      const dialogText = window.prompt("Please enter a username");
-      setName(dialogText ?? '');
-    }
-  }, []);
-
   return (
-    <>
-      <></>
-      <>
-        <ChatWriter name={name} />
-      </>
-    </>
+    <SocketContext.Provider value={socket}>
+      <Row>
+        <ChatMessages />
+      </Row>
+      <Divider />
+        <ChatWriter />
+    </SocketContext.Provider>
   )
 };
 

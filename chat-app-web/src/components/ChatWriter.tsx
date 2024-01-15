@@ -1,46 +1,100 @@
-import { useState } from "react";
-import { sendMessage } from "../api/socketClient";
+import React, {useState, useContext, useCallback, useEffect, ChangeEvent} from 'react';
+import { Socket } from 'socket.io-client';
+import { SocketContext } from '../context/socket';
 import { Message } from "../classes/types";
+import { Input, Select, Row, Col, Button, } from "antd";
+const { Option } = Select;
 
-export interface IChatWriterProps {
-  name: string,
-}
+const ChatWriter = () => {
 
-const ChatWriter = ({
-  name
-}: IChatWriterProps) => {
+  const socket = useContext<Socket>(SocketContext);
+  const [nameSelected, setNameSelected] = useState<boolean>(false);
+  const [name, setName] = useState<string>(localStorage.getItem('name') ?? '');
   const [inputText, setInputText] = useState<string>('');
-  const handleSendMessage = () => {
+  const [messageAudience, setMessageAudience] = useState<string>('global');
+
+  useEffect(() => {
+    if(name == null || name == undefined || name?.length <= 0){
+      setNameSelected(false);
+    }
+  }, []);
+
+  const handleSetNameClicked = () => {
+    localStorage.setItem('name', name);
+    setName(name);
+    setNameSelected(true);
+  };
+
+  const handleSendMessageClicked = () => {
     const message: Message = {
-      id: Date.now(),
+      id: Date.now().toString(),
       author: {
         id: Date.now().toString(),
         name: name
       },
       messageContent: {
-        text: inputText,
+        text: encodeURIComponent(inputText),
         timestamp: Date.now().toString(),
       }
     };
-    sendMessage(message);
+    
+    socket.emit(`send_${messageAudience}_message`, message); 
   };
 
   return (
     <>
     {
-      name?.length <= 0
+      (!nameSelected)
       ?
         <>
-          <p>You need to select a valid name!</p>
+          <Row>
+            <Col>
+              <Input 
+                value={name}
+                onChange={(event) => setName(event?.target?.value)}
+                  />
+            </Col>
+            <Col> 
+              <Button onClick={() => handleSetNameClicked()}>Set Name</Button>
+            </Col>
+          </Row>
         </>
       :
         <>
-          <input type="text" value={inputText} onChange={(event) => setInputText(event?.target?.value)} />
-          <button onClick={() => handleSendMessage()}>Socket Test</button>
+          <Row>
+            <Col span={12}>
+              <Input 
+                value={inputText}
+                onChange={(event) => setInputText(event?.target?.value)}
+                addonBefore={
+                  <>
+                    <Select defaultValue="global" onSelect={(val: string) => setMessageAudience(val)}>
+                      <Option value="global">global</Option>
+                      <Option value="whisper">whisper</Option>
+                    </Select>
+                    {
+                    (messageAudience === 'whisper')
+                    ? 
+                      <Select defaultValue={"Select a user to whisper to: "}>
+                        <Option value=''>Name1</Option>
+                        <Option>Name2</Option>
+                        <Option>Name3</Option>
+                      </Select>
+                    :
+                      <></>
+                    }
+                  </>
+                }
+              />
+            </Col>
+            <Col> 
+              <Button onClick={() => handleSendMessageClicked()}>Send</Button>
+            </Col>
+          </Row>
         </>
     }
     </>
   )
 };
 
-export default ChatWriter
+export default ChatWriter;
