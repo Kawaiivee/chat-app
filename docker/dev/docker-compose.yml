@@ -9,7 +9,7 @@ services:
     ports:
       - 7896:7896
     environment:
-      - PORT=7896
+      - VITE_CHAT_SERVER_SOCKET_URL=localhost:7898/
   chat-app-server:
     container_name: chat-app-server
     tty: true
