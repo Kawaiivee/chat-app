@@ -1,17 +1,22 @@
-import { createContext, useEffect, useState } from "react";
 import ChatWriter from "./components/ChatWriter";
 import ChatMessages from "./components/ChatMessages";
-import { Row, Divider } from "antd";
+import { Col, Divider, Row } from "antd";
 import {socket, SocketContext} from "./context/socket";
+import DoodleCanvas from "./components/DoodleCanvas";
 
 const App = () => {
   return (
     <SocketContext.Provider value={socket}>
       <Row>
-        <ChatMessages />
+        {/* <Col span={12}>
+          <DoodleCanvas />
+        </Col> */}
+        <Col span={12}>
+          <ChatWriter />
+          <Divider />
+          <ChatMessages />
+        </Col>
       </Row>
-      <Divider />
-        <ChatWriter />
     </SocketContext.Provider>
   )
 };

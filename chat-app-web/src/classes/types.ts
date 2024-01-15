@@ -7,6 +7,7 @@ export interface Message {
 export interface Author {
   id: string,
   name: string,
+  color: string
 }
 
 export interface MessageContent {
