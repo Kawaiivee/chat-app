@@ -2,6 +2,8 @@ version: '3'
 services:
   chat-app-web:
     container_name: chat-app-web
+    networks:
+      - chat-app-network
     tty: true
     build:
       context: '../../chat-app-web'
@@ -12,6 +14,8 @@ services:
       - VITE_CHAT_SERVER_SOCKET_URL=chat-app-server.kawaiivee.xyz:7898/
   chat-app-server:
     container_name: chat-app-server
+    networks:
+      - chat-app-network
     tty: true
     build:
         context: '../../chat-app-server'
@@ -20,3 +24,6 @@ services:
       - 7898:7898
     environment:
       - PORT=7898
+networks:
+  chat-app-network:
+    driver: bridge
