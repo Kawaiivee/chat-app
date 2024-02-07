@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react';
-import { Socket } from 'socket.io-client';
 import { SocketContext } from '../context/socket';
 import { Tag, Row, Typography }from 'antd';
 
@@ -12,7 +11,6 @@ const ChatMessages = ({
 }: IChatMessageProps) => {
   const socket = useContext(SocketContext);
   const [messages, setMessages] = useState<any[]>([]);
-  const [messageCount, setMessageCount] = useState<number>(0);
   const notificationSound = new Audio('/notification.mp3');
 
   useEffect(() => {
