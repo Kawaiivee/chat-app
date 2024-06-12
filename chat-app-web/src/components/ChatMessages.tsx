@@ -2,16 +2,12 @@ import { useState, useEffect, useContext } from 'react';
 import { SocketContext } from '../context/socket';
 import { Tag, Row, Typography }from 'antd';
 
-export interface IChatMessageProps {
-  nameSelected: boolean;
-};
+export interface IChatMessageProps { };
 
-const ChatMessages = ({
-  nameSelected,
-}: IChatMessageProps) => {
+const ChatMessages = ({ }: IChatMessageProps) => {
   const socket = useContext(SocketContext);
   const [messages, setMessages] = useState<any[]>([]);
-  const notificationSound = new Audio('/notification.mp3');
+  const [notificationSound, setNotificationSound] = useState<HTMLAudioElement>(new Audio('/notification.mp3'));
 
   useEffect(() => {
     socket.on('server_received_message', (data) => {
@@ -24,11 +20,11 @@ const ChatMessages = ({
     return () => {
       socket.off('server_received_message');
     };
-  }, [socket]);
+  });
 
   return (
   <>
-    {!nameSelected ? <></> : messages.map((x, idx) => {
+    {messages.map((x, idx) => {
       if(x == null || x == undefined || x?.messageContent.timestamp == null || x?.messageContent?.timestamp == undefined){
         return (<></>);
       }

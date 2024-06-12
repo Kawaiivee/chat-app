@@ -6,7 +6,6 @@ import {socket, SocketContext} from "./context/socket";
 // import DoodleCanvas from "./components/DoodleCanvas";
 
 const App = () => {
-  const [nameSelected, setNameSelected] = useState<boolean>(false);
   
   return (
     <SocketContext.Provider value={socket}>
@@ -17,7 +16,7 @@ const App = () => {
         <Col span={12}>
           <ChatWriter />
           <Divider />
-          <ChatMessages nameSelected={nameSelected} />
+          <ChatMessages />
         </Col>
       </Row>
     </SocketContext.Provider>

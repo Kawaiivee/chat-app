@@ -9,7 +9,9 @@ const ChatWriter = () => {
 
   const socket = useContext<Socket>(SocketContext);
   const [nameSelected, setNameSelected] = useState<boolean>(false);
-  const [name, setName] = useState<string>(localStorage.getItem('name') ?? '');
+  const [color, setColor] = useState<string>('');
+  const [colorSelected, setColorSelected] = useState<boolean>(false)
+  const [name, setName] = useState<string>(localStorage.getItem('chat-app-name') ?? '');
   const [inputText, setInputText] = useState<string>('');
   const [messageAudience, setMessageAudience] = useState<string>('global');
 
@@ -20,15 +22,22 @@ const ChatWriter = () => {
     else {
       setNameSelected(true);
     }
+    if(color == null || color == undefined || color?.length <= 0){
+      setColorSelected(false);
+    }
+    else{
+      setColorSelected(true);
+    }
   }, []);
 
   const handleSetNameClicked = () => {
-    localStorage.setItem('name', name.trim());
+    localStorage.setItem('chat-app-name', name.trim());
     setName(name.trim());
     setNameSelected(true);
-    socket.emit('name_selected', {
 
-    });
+    // socket.emit('name_selected', {
+      // add logic to alert other users that a new user joined based on name_selected
+    // });
   };
 
   const handleSendMessageClicked = () => {
